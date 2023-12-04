@@ -1,0 +1,5 @@
+.card {
+  min-width: 5em;
+  max-width: 10em;
+  aspect-ratio: 9/16;
+}
