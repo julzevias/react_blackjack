@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddPlayers = ({ onAddPlayers, players }) => {
+const AddPlayers = ({ onAddPlayers }) => {
   const [addPlayer, setAddPlayer] = useState(false);
 
   const submitPlayer = (e) => {
@@ -9,6 +9,7 @@ const AddPlayers = ({ onAddPlayers, players }) => {
     setAddPlayer(false);
 
     if (e.target[0].value !== "dealer") {
+      console.log(onAddPlayers);
       onAddPlayers(e.target[0].value);
     }
   };
@@ -18,7 +19,7 @@ const AddPlayers = ({ onAddPlayers, players }) => {
       <div className="d-flex justify-content-center">
         <button
           type="button"
-          className="btn border"
+          className="btn btn-block border"
           onClick={() => {
             setAddPlayer(true);
           }}
@@ -42,7 +43,7 @@ const AddPlayers = ({ onAddPlayers, players }) => {
               required
             />
           </div>
-          <button type="submit" className="btn border">
+          <button type="submit" className="btn btn-block border">
             Submit
           </button>
         </form>

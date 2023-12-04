@@ -3,18 +3,18 @@ import AddPlayers from "./components/addPlayers";
 import Hand from "./components/hand";
 
 function App() {
-  const [players, setPlayers] = useState(["jon", "bella"]);
+  const [players, setPlayers] = useState(["jon"]);
   const [startGame, setStartGame] = useState(false);
   const [deck, setDeck] = useState(() => {
     return createDeck();
   });
-  const [playerHands, setPlayerHands] = useState([]);
+  const [allHands, setAllHands] = useState([]);
   const [turn, setTurn] = useState(0);
 
   const startGameSetup = () => {
     const allPlayers = ["dealer", ...players];
     const tempDeck = [...deck];
-    const tempPlayerHands = [];
+    const tempAllHands = [];
 
     allPlayers.forEach((player) => {
       const playerObject = { name: player, hand: [] };
@@ -22,18 +22,36 @@ function App() {
       const card2 = tempDeck.pop();
 
       playerObject.hand.push(card1, card2);
-      tempPlayerHands.push(playerObject);
+      tempAllHands.push(playerObject);
       setDeck(tempDeck);
     });
 
-    setPlayerHands(tempPlayerHands);
+    setAllHands(tempAllHands);
 
     setStartGame(true);
   };
 
+  const onSetAllHands = (setOfHands, playerType) => {
+    const dealerHand = allHands[0];
+    const playerHands = [...allHands].slice(1, allHands.length);
+
+    const playerDeck = [...deck];
+
+    if (playerType === "dealer") {
+      setAllHands([...setOfHands, playerHands]);
+    }
+
+    if (playerType === "player") {
+      setAllHands([dealerHand, ...setOfHands]);
+    }
+
+    playerDeck.pop();
+    setDeck(playerDeck);
+  };
+
   if (startGame === false) {
     return (
-      <div className="d-flex flex-column justify-content-center">
+      <div className="d-flex flex-column justify-content-center m-3">
         <div className="text-center mb-4">
           <b>All players</b>
         </div>
@@ -48,7 +66,11 @@ function App() {
             onAddPlayers={(newPlayer) => setPlayers([...players, newPlayer])}
           />
         </div>
-        <button type="button" className="btn border" onClick={startGameSetup}>
+        <button
+          type="button"
+          className="btn btn-block border mx-auto col-1 m-5"
+          onClick={startGameSetup}
+        >
           Start Game
         </button>
       </div>
@@ -58,19 +80,23 @@ function App() {
       <>
         <div className="m-4">
           <div className="d-flex justify-content-center m-4">
-            <Hand playerHands={playerHands.slice(0, 1)} />
-          </div>
-          <div className="d-flex justify-content-center">
-            <button type="button" className="btn border px-5">
-              Hit
-            </button>
-            <button type="button" className="btn border px-5">
-              Stand
-            </button>
+            <Hand
+              hands={[...allHands.slice(0, 1)]}
+              drawnCard={[...deck].pop()}
+              onSetAllHands={(dealerHand) => {
+                onSetAllHands(dealerHand, "dealer");
+              }}
+            />
           </div>
         </div>
-        <div className="d-flex flex-row justify-content-center flex-wrap">
-          <Hand playerHands={playerHands.slice(1, playerHands.length)} />
+        <div className="d-flex flex-row justify-content-center">
+          <Hand
+            hands={[...allHands.slice(1, allHands.length)]}
+            drawnCard={[...deck].pop()}
+            onSetAllHands={(playerHands) =>
+              onSetAllHands(playerHands, "player")
+            }
+          />
         </div>
       </>
     );

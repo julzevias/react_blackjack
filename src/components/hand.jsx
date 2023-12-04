@@ -1,10 +1,19 @@
 import React from "react";
 import Card from "./card";
+import { hitFunc, standFunc } from "./playerActions";
 
-const Hand = ({ playerHands }) => {
+const Hand = ({ hands, drawnCard, onSetAllHands }) => {
+  const hit = (playerDetails, i) => {
+    hitFunc(playerDetails, i, drawnCard, hands, onSetAllHands);
+  };
+
+  const stand = () => {
+    standFunc();
+  };
+
   return (
     <>
-      {playerHands.map((playerDetails) => {
+      {hands.map((playerDetails, i) => {
         return (
           <div key={playerDetails.name}>
             <h5 className="text-center">{playerDetails.name}</h5>
@@ -23,6 +32,29 @@ const Hand = ({ playerHands }) => {
                 );
               })}
             </div>
+
+            {
+              <div
+                className={`${playerDetails.name === "dealer" ? "d-none" : ""}`}
+              >
+                <div className="d-grid gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-block btn-sm border mx-4"
+                    onClick={() => hit(playerDetails, i)}
+                  >
+                    Hit
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-block btn-sm border mx-4"
+                    onClick={stand}
+                  >
+                    Stand
+                  </button>
+                </div>
+              </div>
+            }
           </div>
         );
       })}
