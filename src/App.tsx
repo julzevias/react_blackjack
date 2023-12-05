@@ -1,29 +1,41 @@
 import { useState } from "react";
-import AddPlayers from "./components/addPlayers";
-import Hand from "./components/hand";
+import AddPlayers from "./components/addPlayers.tsx";
+import Hand from "./components/hand.tsx";
+
+interface PlayerDetails {
+  name: string;
+  hand: Card[];
+}
+
+interface Card {
+  number: string;
+  suite: string;
+}
 
 function App() {
-  const [players, setPlayers] = useState(["jon"]);
-  const [startGame, setStartGame] = useState(false);
-  const [deck, setDeck] = useState(() => {
+  const [players, setPlayers] = useState<string[]>(["jon"]);
+  const [startGame, setStartGame] = useState<boolean>(false);
+  const [deck, setDeck] = useState<Card[]>(() => {
     return createDeck();
   });
-  const [allHands, setAllHands] = useState([]);
+  const [allHands, setAllHands] = useState<PlayerDetails[]>([]);
   const [turn, setTurn] = useState(0);
 
   const startGameSetup = () => {
-    const allPlayers = ["dealer", ...players];
-    const tempDeck = [...deck];
-    const tempAllHands = [];
+    const allPlayers: string[] = ["dealer", ...players];
+    const tempDeck: Card[] = [...deck];
+    const tempAllHands: PlayerDetails[] = [];
 
     allPlayers.forEach((player) => {
-      const playerObject = { name: player, hand: [] };
-      const card1 = tempDeck.pop();
-      const card2 = tempDeck.pop();
+      const playerObject: PlayerDetails = { name: player, hand: [] };
+      const card1: Card | undefined = tempDeck.pop();
+      const card2: Card | undefined = tempDeck.pop();
 
-      playerObject.hand.push(card1, card2);
-      tempAllHands.push(playerObject);
-      setDeck(tempDeck);
+      if (typeof card1 === "object" && typeof card2 === "object") {
+        playerObject.hand.push(card1, card2);
+        tempAllHands.push(playerObject);
+        setDeck(tempDeck);
+      }
     });
 
     setAllHands(tempAllHands);
@@ -31,14 +43,14 @@ function App() {
     setStartGame(true);
   };
 
-  const onSetAllHands = (setOfHands, playerType) => {
+  const onSetAllHands = (setOfHands: PlayerDetails[], playerType: string) => {
     const dealerHand = allHands[0];
     const playerHands = [...allHands].slice(1, allHands.length);
 
     const playerDeck = [...deck];
 
     if (playerType === "dealer") {
-      setAllHands([...setOfHands, playerHands]);
+      setAllHands([...setOfHands, ...playerHands]);
     }
 
     if (playerType === "player") {
@@ -62,7 +74,6 @@ function App() {
         </div>
         <div className="">
           <AddPlayers
-            players={players}
             onAddPlayers={(newPlayer) => setPlayers([...players, newPlayer])}
           />
         </div>
@@ -82,7 +93,7 @@ function App() {
           <div className="d-flex justify-content-center m-4">
             <Hand
               hands={[...allHands.slice(0, 1)]}
-              drawnCard={[...deck].pop()}
+              drawnCard={deck[deck.length - 1]}
               onSetAllHands={(dealerHand) => {
                 onSetAllHands(dealerHand, "dealer");
               }}
@@ -92,7 +103,7 @@ function App() {
         <div className="d-flex flex-row justify-content-center">
           <Hand
             hands={[...allHands.slice(1, allHands.length)]}
-            drawnCard={[...deck].pop()}
+            drawnCard={deck[deck.length - 1]}
             onSetAllHands={(playerHands) =>
               onSetAllHands(playerHands, "player")
             }

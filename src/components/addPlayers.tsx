@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import { FormEvent, useState } from "react";
 
-const AddPlayers = ({ onAddPlayers }) => {
+const AddPlayers = ({
+  onAddPlayers,
+}: {
+  onAddPlayers: (newPlayerName: string) => void;
+}) => {
   const [addPlayer, setAddPlayer] = useState(false);
 
-  const submitPlayer = (e) => {
+  const submitPlayer = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setAddPlayer(false);
 
-    if (e.target[0].value !== "dealer") {
+    if ((e.currentTarget[0] as HTMLInputElement).value !== "dealer") {
       console.log(onAddPlayers);
-      onAddPlayers(e.target[0].value);
+      onAddPlayers((e.currentTarget[0] as HTMLInputElement).value);
     }
   };
 

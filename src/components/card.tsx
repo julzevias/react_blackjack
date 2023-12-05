@@ -1,7 +1,6 @@
-import React from "react";
 import "../css/card.css";
 
-const Card = ({ number, suite }) => {
+const Card = ({ number, suite }: { number: string; suite: string }) => {
   return (
     <div
       className={`${

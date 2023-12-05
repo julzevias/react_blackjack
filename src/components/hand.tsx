@@ -1,9 +1,26 @@
-import React from "react";
-import Card from "./card";
+import PlayingCard from "./card.tsx";
 import { hitFunc, standFunc } from "./playerActions";
 
-const Hand = ({ hands, drawnCard, onSetAllHands }) => {
-  const hit = (playerDetails, i) => {
+interface Card {
+  number: string;
+  suite: string;
+}
+
+interface PlayerDetails {
+  name: string;
+  hand: Card[];
+}
+
+const Hand = ({
+  hands,
+  drawnCard,
+  onSetAllHands,
+}: {
+  hands: PlayerDetails[];
+  drawnCard: Card;
+  onSetAllHands: (a: PlayerDetails[]) => void;
+}) => {
+  const hit = (playerDetails: PlayerDetails, i: number) => {
     hitFunc(playerDetails, i, drawnCard, hands, onSetAllHands);
   };
 
@@ -13,7 +30,7 @@ const Hand = ({ hands, drawnCard, onSetAllHands }) => {
 
   return (
     <>
-      {hands.map((playerDetails, i) => {
+      {hands.map((playerDetails: PlayerDetails, i: number) => {
         return (
           <div key={playerDetails.name}>
             <h5 className="text-center">{playerDetails.name}</h5>
@@ -22,9 +39,9 @@ const Hand = ({ hands, drawnCard, onSetAllHands }) => {
                 playerDetails.name === "dealer" ? "flex-row" : "flex-column"
               }`}
             >
-              {playerDetails.hand.map((card) => {
+              {playerDetails.hand.map((card: Card) => {
                 return (
-                  <Card
+                  <PlayingCard
                     key={`${card.number}${card.suite}`}
                     number={card.number}
                     suite={card.suite}
