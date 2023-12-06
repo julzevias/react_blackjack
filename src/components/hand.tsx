@@ -1,16 +1,7 @@
 import React from "react";
 import PlayingCard from "./card";
+import { Card, PlayerDetails } from "../types";
 import { hitFunc, standFunc } from "./playerActions";
-
-interface Card {
-  number: string;
-  suite: string;
-}
-
-interface PlayerDetails {
-  name: string;
-  hand: Card[];
-}
 
 const Hand = ({
   hands,
