@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import AddPlayers from "./components/addPlayers";
-import Hand from "./components/hand";
-
-interface PlayerDetails {
-  name: string;
-  hand: Card[];
-}
-
-interface Card {
-  number: string;
-  suite: string;
-}
+import { Card, PlayerDetails } from "./types";
+import AddPlayers from "./components/addPlayers.tsx";
+import Hand from "./components/hand.tsx";
 
 function App() {
   const [players, setPlayers] = useState<string[]>(["jon"]);

@@ -1,7 +1,8 @@
 import React from "react";
+import { Card as CardType } from "../types";
 import "../css/card.css";
 
-const Card = ({ number, suite }: { number: string; suite: string }) => {
+const Card = ({ number, suite }: CardType) => {
   return (
     <div
       className={`${
