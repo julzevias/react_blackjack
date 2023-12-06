@@ -1,6 +1,6 @@
-import { useState } from "react";
-import AddPlayers from "./components/addPlayers.tsx";
-import Hand from "./components/hand.tsx";
+import React, { useState } from "react";
+import AddPlayers from "./components/addPlayers";
+import Hand from "./components/hand";
 
 interface PlayerDetails {
   name: string;
@@ -131,7 +131,7 @@ const createDeck = () => {
     "Q",
     "K",
   ];
-  let deck = [];
+  let deck: { number: string; suite: string }[] = [];
 
   for (let i = 0; i < values.length; i++) {
     for (let j = 0; j < suits.length; j++) {

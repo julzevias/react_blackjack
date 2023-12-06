@@ -1,4 +1,5 @@
-import PlayingCard from "./card.tsx";
+import React from "react";
+import PlayingCard from "./card";
 import { hitFunc, standFunc } from "./playerActions";
 
 interface Card {
